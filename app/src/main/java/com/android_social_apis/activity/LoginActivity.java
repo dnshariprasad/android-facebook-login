@@ -20,6 +20,11 @@ import com.facebook.login.widget.LoginButton;
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
+
+
+//  LOGOUT  -   LoginManager.getInstance().logOut();
+//  LOGIN   -             LoginManager.getInstance().logInWithPublishPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
+
     private FacebookCallback facebookCallback = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {
@@ -28,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
             Profile profile = Profile.getCurrentProfile();
             MainActivity.start(LoginActivity.this);
             finish();
+
         }
 
         @Override
