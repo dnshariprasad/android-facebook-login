@@ -23,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 //  LOGOUT  -   LoginManager.getInstance().logOut();
-//  LOGIN   -             LoginManager.getInstance().logInWithPublishPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
+//  LOGIN   -   LoginManager.getInstance().logInWithPublishPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
 
     private FacebookCallback facebookCallback = new FacebookCallback<LoginResult>() {
         @Override
