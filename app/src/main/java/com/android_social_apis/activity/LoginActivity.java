@@ -12,15 +12,10 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -29,11 +24,10 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onSuccess(LoginResult loginResult) {
             Log.d(TAG, "onSuccess: User ID:  " + loginResult.getAccessToken().getUserId() + "\n" + "Auth Token: " + loginResult.getAccessToken().getToken());
-            GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), graphRequest);
-            Bundle parameters = new Bundle();
-            parameters.putString("fields", "id,name,email,gender,birthday");
-            request.setParameters(parameters);
-            request.executeAsync();
+            AccessToken accessToken = loginResult.getAccessToken();
+            Profile profile = Profile.getCurrentProfile();
+            MainActivity.start(LoginActivity.this);
+            finish();
         }
 
         @Override
@@ -46,21 +40,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.d(TAG, "onError: Login attempt failed.");
         }
     };
-    private GraphRequest.GraphJSONObjectCallback graphRequest = new GraphRequest.GraphJSONObjectCallback() {
-        @Override
-        public void onCompleted(JSONObject object, GraphResponse response) {
-            Log.v("LoginActivity", response.toString());
-            // Application code
-            try {
-                String email = object.getString("email");
-                String birthday = object.getString("birthday"); // 01/31/1980 format
-                MainActivity.start(LoginActivity.this);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
 
-    };
     private AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
         @Override
         protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
