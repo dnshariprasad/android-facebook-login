@@ -6,12 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.android_social_apis.R;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -57,7 +61,19 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     };
+    private AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+        @Override
+        protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
 
+        }
+    };
+
+    private ProfileTracker profileTracker = new ProfileTracker() {
+        @Override
+        protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
+            displayMessage(newProfile);
+        }
+    };
     private static final String TAG = "LoginActivity";
     private CallbackManager callbackManager;
     private LoginButton loginButton;
@@ -73,11 +89,33 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
         loginButton.registerCallback(callbackManager, facebookCallback);
 
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Profile profile = Profile.getCurrentProfile();
+        displayMessage(profile);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        accessTokenTracker.stopTracking();
+        profileTracker.stopTracking();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    private void displayMessage(Profile profile) {
+        if (profile != null) {
+//            textView.setText(profile.getName());
+        }
     }
 }
